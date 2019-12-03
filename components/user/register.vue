@@ -33,14 +33,14 @@ export default {
   data() {
     // 确认密码
     const validatePass = (rule, value, callback) => {
-        if (value === '') {
-            callback(new Error('请再次输入密码'));
-        } else if (value !== this.form.password) {
-            callback(new Error('两次输入密码不一致!'));
-        } else {
-            callback();
-        }
-    }
+      if (value === "") {
+        callback(new Error("请再次输入密码"));
+      } else if (value !== this.form.password) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        callback();
+      }
+    };
     return {
       // 表单数据
       form: {
@@ -91,11 +91,59 @@ export default {
   },
   methods: {
     // 发送验证码
-    handleSendCaptcha() {},
+    handleSendCaptcha() {
+      if (!this.form.username) {
+        this.$confirm("手机号码不能为空", "提示", {
+          confirmButtonText: "确定",
+          showCancelButton: false,
+          type: "warning"
+        });
+        return;
+      }
+
+      if (this.form.username.length !== 11) {
+        this.$confirm("手机号码格式错误", "提示", {
+          confirmButtonText: "确定",
+          showCancelButton: false,
+          type: "warning"
+        });
+        return;
+      }
+
+      this.$axios({
+        url: `captchas`,
+        method: "post",
+        data: {
+          tel: this.form.username
+        }
+      }).then(res => {
+        const { code } = res.data;
+        this.$confirm(`模拟手机验证码为 : ${code}`, "提示", {
+          confirmButtonText: "确定",
+          showCancelButton: false,
+          type: "warning"
+        });
+      });
+    },
 
     // 注册
     handleRegSubmit() {
-      console.log(this.form);
+      // console.log(this.form);
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          // 注册提交
+          // 为了把checkPassword 这组数据拿出来  rest参数法，与展开运算符不同
+          const { checkPassword, ...props } = this.form;
+
+          this.$axios({
+            url: `/accounts/register`,
+            method: "post",
+            data: props
+          }).then(res => {
+            console.log(res.data);
+          });
+        }
+      });
     }
   }
 };
