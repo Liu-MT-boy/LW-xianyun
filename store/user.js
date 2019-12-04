@@ -6,6 +6,7 @@ export const state = () => ({
         user : {}
     }
 })
+// 修改信息的
 export const mutations = {
     // 保存用户信息到state
     setUserInfo(state,data){
