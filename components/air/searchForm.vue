@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 export default {
   data() {
     return {
@@ -133,13 +134,21 @@ export default {
         },
 
     // 出发城市下拉选择时触发
-    handleDepartSelect(item) {},
+    handleDepartSelect(item) {
+        this.form.departCity = item.value
+        this.form.departCode = item.sort;
+    },
 
     // 目标城市下拉选择时触发
-    handleDestSelect(item) {},
+    handleDestSelect(item) {
+        this.form.destCity = item.value
+        this.form.destCode = item.sort;
+    },
 
     // 确认选择日期时触发
-    handleDate(value) {},
+    handleDate(value) {
+        this.form.departDate = moment(value).format("YYYY-MM-DD")
+    },
 
     // 触发和目标城市切换时触发
     handleReverse() {},
