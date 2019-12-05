@@ -102,7 +102,7 @@ export default {
       }
       cb(arr)
     },
-    
+
     // 查询城市接口的方法，返回promise
         // queryString是查询关键字
         querySearchAsync(queryString) {
@@ -145,7 +145,9 @@ export default {
     handleReverse() {},
 
     // 提交表单是触发
-    handleSubmit() {}
+    handleSubmit() {
+        console.log(this.form);
+    }
   },
   mounted() {}
 }
