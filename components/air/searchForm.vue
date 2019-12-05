@@ -36,8 +36,13 @@
       </el-form-item>
       <el-form-item label="出发时间">
         <!-- change 用户确认选择日期时触发 -->
-        <el-date-picker type="date" placeholder="请选择日期" style="width: 100%;" @change="handleDate" v-model="form.departDate">
-        </el-date-picker>
+        <el-date-picker
+          type="date"
+          placeholder="请选择日期"
+          style="width: 100%;"
+          @change="handleDate"
+          v-model="form.departDate"
+        ></el-date-picker>
       </el-form-item>
       <el-form-item label>
         <el-button style="width:100%;" type="primary" icon="el-icon-search" @click="handleSubmit">搜索</el-button>
@@ -74,15 +79,58 @@ export default {
 
     // 出发城市输入框获得焦点时触发
     // value 是选中的值，cb是回调函数，接收要展示的列表
-    queryDepartSearch(value, cb) {
-      cb([{ value: 1 }, { value: 2 }, { value: 3 }]);
+    async queryDepartSearch(value, cb) {
+      const arr = await this.querySearchAsync(value)
+      if(arr.length >0) {
+          // 不在下拉列表中选择，则默认选择第一项
+          this.form.departCity = arr[0].value
+          this.form.departCode = arr[0].sort
+      }
+      console.log(arr)
+      
+      cb(arr)
     },
 
     // 目标城市输入框获得焦点时触发
     // value 是选中的值，cb是回调函数，接收要展示的列表
-    queryDestSearch(value, cb) {
-      cb([{ value: 1 }, { value: 2 }, { value: 3 }]);
+    async queryDestSearch(value, cb) {
+      const arr = await this.querySearchAsync(value)
+      if(arr.length >0) {
+          // 不在下拉列表中选择，则默认选择第一项
+          this.form.destCity = arr[0].value
+          this.form.destCode = arr[0].sort
+      }
+      cb(arr)
     },
+    
+    // 查询城市接口的方法，返回promise
+        // queryString是查询关键字
+        querySearchAsync(queryString) {
+            return new Promise((resolve, reject) => {
+                // 如果关键字是空，则直接返回
+                if(!queryString){
+                    return resolve([]);
+                }
+
+                this.$axios({
+                    url: `/airs/city`,
+                    params: {
+                        name: queryString
+                    }
+                }).then(res => {
+                    const { data } = res.data;
+
+                    // 下拉提示列表必须要有value字段
+                    const arr = data.map(v => {
+                        return {
+                            ...v,
+                            value: v.name.replace("市", "")
+                        }
+                    });
+                    resolve(arr);
+                });
+            });
+        },
 
     // 出发城市下拉选择时触发
     handleDepartSelect(item) {},
