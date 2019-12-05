@@ -1,19 +1,21 @@
 <template>
-  <div class="container">
+  <section class="container">
     <h2 class="air-title">
       <span class="iconfont iconfeiji"></span>
       <i>国内机票</i>
     </h2>
+
     <!-- 搜索广告栏 -->
     <el-row type="flex" justify="space-between">
       <!-- 搜索表单 -->
-      <div>搜索</div>
+      <SearchFrom />
 
       <!-- banner广告 -->
       <div class="sale-banner">
         <img src="http://157.122.54.189:9093/images/pic_sale.jpeg" />
       </div>
     </el-row>
+
     <!-- 广告 -->
     <el-row type="flex" class="statement">
       <el-col :span="8">
@@ -34,13 +36,20 @@
       <span class="iconfont icontejiajipiao"></span>
       <i>特价机票</i>
     </h2>
+
     <!-- 特价机票 -->
     <div class="air-sale"></div>
-  </div>
+  </section>
 </template>
 
 <script>
-export default {};
+import SearchFrom from "@/components/air/searchForm";
+
+export default {
+  components: {
+    SearchFrom
+  }
+};
 </script>
 
 <style scoped lang="less">
@@ -155,5 +164,4 @@ export default {};
     font-size: 20px;
   }
 }
-</style>
 </style>
