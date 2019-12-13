@@ -28,7 +28,7 @@
                         </a>
                         <a href="javascript:;" class="share-icon">
                             <i class="el-icon-star-off"></i>
-                            <p>收藏</p>
+                            <p @click="handCollect">收藏</p>
                         </a>
                         <a href="javascript:;" class="share-icon">
                             <i class="iconfont iconfenxiang"></i>
@@ -102,7 +102,6 @@
                    <relatedPost :data="reList"></relatedPost>
                </div>
         </div>
-
   </div>
 </template>
 
@@ -205,10 +204,36 @@ export default {
                 this.$router.push({path:"/login"})
             }
         },
+        // 实现点赞功能
+        handCollect () { 
+            const id = this.$route.query.id || 5
+            let token = this.$store.state.user.userInfo.token
+            if(token){
+                this.$axios({
+                url:'/posts/like',
+                params:{ id },
+                headers:{
+                    Authorization : "Bearer " +  token
+                },
+                }).then( res => {
+                    this.postRelated.like += 1
+                    if(!res.message=="用户已点赞") {
+                        this.postRelated.like += 1
+                    }
+                }).catch(err=>{
+                    // console.log(err);
+                })
+            }else {
+                this.$message({
+                    message:'请先登录账号'
+                })
+                this.$router.push({path:"/login"})
+            }
+        },
         // 获取评论列表的方法
         getCommentList () {
             const id = this.$route.query.id || 5
-            // 实现获取表论列表数据
+            // 实现获取评论列表数据
             this.PostList.post = id*1
             this.$axios({
                 url:'/posts/comments',
@@ -226,6 +251,7 @@ export default {
                     }
                 })
                 this.total = arr.length
+                console.log(arr);
             })
         },
         // 上传文件成功时调用的函数
@@ -267,7 +293,7 @@ export default {
         this.getPostDate()
         this.getCommentList()
         const id = this.$route.query.id || 5
-        // 文章推荐求情
+        // 文章推荐详情
         this.$axios({
             url:'/posts/recommend',
             params:{ id }

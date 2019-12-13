@@ -3,7 +3,7 @@
       <el-row class="header">
           <p>相关攻略</p>
       </el-row>
-      <a :href="`/post/postDetails?id=${item.id}`" v-for="(item,index) in data" :key="index">
+      <a :href="`/post/detail?id=${item.id}`" v-for="(item,index) in data" :key="index">
           <div class="content">
                 <div class="info">
                     <div class="left">
