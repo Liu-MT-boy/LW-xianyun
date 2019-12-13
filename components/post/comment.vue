@@ -1,92 +1,71 @@
 <template>
-  <el-container>
-     
-  
-  </el-container>
-</template>
+  <el-row>
+    <el-col :span="24">
+    <div class="commentList">
+      <div class="item">
+        <div class="head">
+          <img src="" alt />
+          <div>
+            <span>火星网友</span>
+            <span>2小时前</span>
+          </div>
+        </div>
+        <div class="text">文章说得很有道理</div>
+        <img src="" alt />
+      </div>
+    </div>
+    </el-col>
+    <el-col :span="24">
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="pageIndex"
+      :page-sizes="[2, 4, 6, 8]"
+      :page-size="2"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total">
+    </el-pagination>
+     </el-col>
+      </el-row>
+    </template>
 
 <script>
 export default {
-  
-}
+  data () {
+    return {
+      reviewdata : ""
+    }
+  },
+  mounted () {
+    this.$axios({
+      url: `/posts/comments`,
+      params: {
+        post:`this.$route.id`
+      }
+    }).then(res => {
+      console.log(res);
+      this.reviewdata=res.data
+      console.log(res.data);
+    //   console.log(this.contain);
+    });
+   console.log(this.$route.query.id);
+  }
+  }
 </script>
 
-<style>
-.main .cmt-input {
+<style lang='less' scoped>
+.commentList{
+    border: 1px solid #ccc;
+    border-bottom: 2px dashed #ddd;
+    padding: 5px 20px 5px;
+}
+.head{
   margin-bottom: 10px;
-}
-.el-textarea {
-  display: inline-block;
-  width: 100%;
-  vertical-align: bottom;
-  font-size: 14px;
-}
-element.style {
-  resize: none;
-  min-height: 33px;
-}
-.el-textarea__inner:hover {
-  border-color: #c0c4cc;
-}
-.el-textarea__inner {
-  display: block;
-  resize: vertical;
-  padding: 5px 15px;
-  line-height: 1.5;
-  box-sizing: border-box;
-  width: 100%;
-  font-size: inherit;
-  color: #606266;
-  background-color: #fff;
-  background-image: none;
-  border: 1px solid #dcdfe6;
-  border-radius: 4px;
-  transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
-}
-textarea {
-  -webkit-writing-mode: horizontal-tb !important;
-  text-rendering: auto;
-  color: initial;
-  letter-spacing: normal;
-  word-spacing: normal;
-  text-transform: none;
-  text-indent: 0px;
-  text-shadow: none;
-  display: inline-block;
-  text-align: start;
-  -webkit-appearance: textarea;
-  background-color: white;
-  -webkit-rtl-ordering: logical;
-  flex-direction: column;
-  resize: auto;
-  cursor: text;
-  white-space: pre-wrap;
-  overflow-wrap: break-word;
-  margin: 0em;
-  font: 400 13.3333px Arial;
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgb(169, 169, 169);
-  border-image: initial;
-  padding: 2px;
-}
-.up-lock {
-  position: relative;
-}
-
-.but {
-  position: absolute;
-  right: 0px;
-  top: 0px;
-  padding: 7px 15px;
-  color: #fff;
-  background-color: #409eff;
-  border-color: #409eff;
   font-size: 12px;
-  border-radius: 3px;
-  line-height: 1;
-  white-space: nowrap;
-  cursor: pointer;
-  font-weight: 500;
+  color: #666;
+}
+.img {
+   height:10px;
+   width:10px;
 }
 </style>

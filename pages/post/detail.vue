@@ -32,7 +32,7 @@
             <i class="iconfont iconpinglun"></i>
             <p>评论(100)</p>
           </div>
-          <div class="ctrl-item">
+          <div class="ctrl-item" @click="enshrine">
             <i class="iconfont iconstar1"></i>
             <p>收藏</p>
           </div>
@@ -40,12 +40,13 @@
             <i class="iconfont iconfenxiang"></i>
             <p>分享</p>
           </div>
-          <div class="ctrl-item">
+          <div class="ctrl-item" @click="givelike">
             <i class="iconfont iconding"></i>
             <p>点赞(68)</p>
           </div>
         </div>
       </div>
+      <div class="span">评论</div>
          <el-input
             type="textarea"
             :rows="2"
@@ -53,6 +54,14 @@
             placeholder="说点什么吧..."
             resize="none">
           </el-input>
+        <div class="uploading">
+           <el-upload
+             action="http:127.0.0.1:1337/upload"
+             list-type="picture-card">
+             <i class="el-icon-plus"></i>
+           </el-upload>
+           <el-button type="primary" class="uploadingboy" @click="uploading">提交</el-button>
+        </div>
       </div>
       <!-- 评论区 -->
       <Comment />
@@ -74,21 +83,75 @@ export default {
   data() {
     return {
         contain:"",
-        commetn:''
+        commetn:'',
+        files:""
     };
   },
   methods: {
+    //   点击评论跳转
     handelFocus(){
-      console.log(123);
+      // console.log(123);
       this.commetn = true
       this.$refs.comit.focus()
+    },
+      //  点击收藏
+    enshrine () {
+      let id = this.$route.query.id
+      let token = this.$store.state.user.userInfo.token
+      // console.log(token);
+      this.$axios({
+        url:`/posts/star`,
+        headers:{
+          Authorization: "Bearer " + token
+        },
+        params: {
+          id : id
+        }
+      }).then (res=>{
+        console.log(123);
+        console.log(res);
+      })
+    },
+      //  用户点赞
+    givelike () {
+      let id = this.$route.query.id
+      let token = this.$store.state.user.userInfo.token
+      this.$axios({
+        url:`/posts/like`,
+        headers:{
+          Authorization:"Bearer " + token
+        },
+        params: {
+          id : id
+        }
+      }).then (res=>{
+        console.log(res);
+      })
+    },
+    // 点击提交
+    uploading () {
+      let files = this.$route.query.files
+      let token = this.$store.state.user.userInfo.token
+      this.$axios({
+        url:`/upload`,
+        headers:{
+          Authorization:"Bearer " + token
+        },
+        params:{
+          files : files
+        }
+      }).then (res=>{
+        console.log(res);
+      })
     }
   },
   mounted() {
     this.$axios({
       url: `/posts/${this.$route.query.id}`
     }).then(res => {
+      console.log(res);
       this.contain=res.data
+      console.log(res.data);
     //   console.log(this.contain);
     });
    console.log(this.$route.query.id);
@@ -96,7 +159,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
 .container {
   width: 1000px;
   margin: 0 auto;
@@ -160,5 +223,18 @@ export default {
     color:#999;
     padding : 20px;
     text-align: right;
+}
+.uploading{
+  position:relative;
+  margin-top: 10px;
+}
+.uploadingboy {
+  position: absolute;
+  top:0px;
+  right:0px;
+}
+.span{
+  margin-bottom: 20px;
+  font-size: 18px;
 }
 </style>
