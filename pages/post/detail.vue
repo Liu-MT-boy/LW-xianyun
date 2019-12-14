@@ -118,13 +118,13 @@ export default {
             postRelated:{
                 comments:[]
             },//文章详情数据
-            textarea:'',
-             reList:'', //推荐文章列表参数
+            textarea:'',  // 评论内容
+             reList:'',   //推荐文章列表参数
              commentDate:{
-                 content:'',//评论内容
-                 pics:[],//图片文件数组
-                //  follow:'',//回复id
-                 post:''//文章id
+                 content:'',   //评论内容
+                 pics:[],      //图片文件数组
+                //  follow:'', //回复id
+                 post:''       //文章id
              },
             //  commentsList:{
 
@@ -274,10 +274,11 @@ export default {
          })
         
         },
-        // 点击评论实现聚集功能
+        // 点击评论实现跳转功能
         focusState () {
             this.$refs.commentUser.focus()
         },
+        // 分页部分
       handleSizeChange(val) {
         // console.log(`每页 ${val} 条`);
         this.pageSize = val;

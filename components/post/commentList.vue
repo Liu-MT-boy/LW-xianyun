@@ -1,39 +1,19 @@
 <template>
-<div style="border: 1px solid #999;">
+<div class="largeFrame">
   <div class="userComment" v-for="(item, index) in commentsList" :key="index">
-    <div class="comment" >
-      <div class="name">
-            <div class="user">
-                <img
-                    class="user_img"
-                    :src="`${$axios.defaults.baseURL}${item.account.defaultAvatar}`"
-                    alt
-                />&nbsp;
-                <span>{{ item.account.nickname }}</span>&nbsp;
-                <span>{{ item.created_at }}</span>
-            </div>
-         <span>1</span>
-      </div>
-      <!-- <UserList v-if="item.parent" :data="item.parent"></UserList> -->
-      <div class="content-img">
-            <p>{{ item.content }}</p>
-            <div class="img">
-               <div v-for="(value, index) in item.pics" :key="index">
-                   <img  :src="`${$axios.defaults.baseURL}${value.url}`"/>
-               </div>
-            </div>
-      </div>
-    </div>
-    <span>回复</span>
+    <commentRecursion :data='item'></commentRecursion>
   </div>
 </div>
 </template>
 
 <script>
+import commentRecursion from '~/components/post/commentRecursion'
 export default {
   name:"UserList",
-    
   props: ["postid","pageIndex","pageSize"],
+  components: {
+    commentRecursion
+  },
   data() {
     return {
         commentsList:{
@@ -76,7 +56,7 @@ export default {
                 let star  = (this.pageIndex - 1) * this.pageSize
                  let end =  star  + this.pageSize 
                  this.commentsList = arr.slice(star,end)
-                 
+                
             })
       }
   },
@@ -88,12 +68,6 @@ export default {
 
 <style lang="less" scoped>
 .userComment {
-  position: relative;
-  padding: 10px 20px 5px 20px;
-  border-bottom: dashed 1px #999;
-  &:last-child{
-      border-bottom: none;
-  }
   &:hover{
       >span{
           display: block;
@@ -142,7 +116,7 @@ export default {
         font-size: 14px;
       }
       .img {
-        padding:10px 15px 20px 0;
+        padding:10px 10px 20px 0;
         padding-left: 15px;
         display: flex;
        >div{

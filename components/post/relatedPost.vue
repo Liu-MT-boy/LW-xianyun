@@ -29,7 +29,7 @@ export default {
   .related{
         .header{
         padding-bottom: 15px;
-        border-bottom: 1px solid #ccc;
+        border-bottom: 1px solid #ddd;
         >p{
             font-size: 18px;
             font-weight: 400;
@@ -40,7 +40,7 @@ export default {
     }
     .content{
             padding: 20px 0;
-            border-bottom: 1px solid #999;
+            border-bottom: 1px solid #ddd;
             .info{
                 display: flex;
                 height: 80px;
